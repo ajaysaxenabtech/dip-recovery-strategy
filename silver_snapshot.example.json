@@ -1,0 +1,9 @@
+{
+  "observed_at_ist": "2026-11-06T14:20:00+05:30",
+  "quote_at_ist": "2026-11-06T14:18:00+05:30",
+  "source": "replace with actual timestamped ETF quote source",
+  "etf_indicative_nav": 180.0,
+  "event_clear": false,
+  "regime_clear": false,
+  "funds_ready": false
+}

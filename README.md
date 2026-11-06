@@ -86,6 +86,58 @@ The PDF is the authoritative reference: 19 chapters covering the discussion that
 
 ## Quickstart
 
+### Silver FoF research and paper screening
+
+`silver_fof.py` is a separate, Silver-only workflow for Axis Silver ETF and
+Axis Silver Fund of Fund. It requires real daily `Date,Nav` CSV files supplied
+by you. Extra CSV columns are ignored. The raw NAV files stay local; the script
+does not download data or generate fallback prices.
+
+```bash
+python silver_fof.py backtest --etf-csv path/to/Axis_SilverETF.csv --fof-csv path/to/Axis_SilverFoF.csv --split 2026-01-01 --output silver_results.json
+python -m unittest discover -s tests
+```
+
+The historical signal uses ETF **closing NAV** on date `t`, with the first
+possible FoF fill at the **next common closing NAV**. It compares a 2.5% ETF
+dip alone, dip plus Wilder RSI(14) in 18–42, and dip plus RSI plus ETF above
+its 200-day NAV average. Each is measured over 1, 3, 5 and 10 holding
+sessions, separately before and after the split date. Trades do not overlap
+within each rule and holding window. The report includes sample sizes, net
+win rates, worst trades, and holdout trade details. It models the Axis FoF
+0.25% exit load for redemption within seven calendar days and a **user
+adjustable assumed** 0.2% roundtrip friction. The friction estimate is not a
+fund charge. Returns use published FoF NAV, which already reflects fund
+expenses. This is a trade level study, not a portfolio IRR calculation.
+
+For a pre-cutoff paper decision, copy `silver_snapshot.example.json`, replace
+every value with an actual timestamped observation, and explicitly set the
+three manual checks. Then run:
+
+```bash
+python silver_fof.py paper --etf-csv path/to/Axis_SilverETF.csv --fof-csv path/to/Axis_SilverFoF.csv --snapshot my_snapshot.json --output silver_paper_result.json
+```
+
+The paper screen rejects quotes older than five minutes, observations at or
+after 14:30 IST, and stale daily NAV history. The 14:30 limit is a conservative
+workflow buffer, **not** the scheme's official cutoff. See the [Axis scheme
+information document](https://www.axismf.com/1/5/85/90/340/453/SIDAxisSilverFundofFund.pdf)
+for the applicable order and funds realization rules and the [Axis FoF page](https://www.axismf.com/mutual-funds/fof-domestic/axis-silver-fund-of-fund/sv-dg/direct)
+for the current exit load. `event_clear`, `regime_clear`,
+and `funds_ready` are manual declarations; this tool does not verify them. A
+paper candidate is **not** a trade instruction or a predicted FoF fill. A
+same-day FoF application receives the applicable closing NAV, which already
+reflects the day's silver move. A daily NAV backtest cannot establish an
+intraday pre-cutoff edge; that needs a timestamped paper log with the final
+allotted and redeemed NAVs. The paper script neither submits orders nor
+calculates position exits.
+
+The legacy sector backtest below is a separate playbook skeleton and may use
+synthetic prices when downloads fail. Do not treat its output as evidence for
+the Axis Silver FoF workflow.
+
+### Original sector playbook skeleton
+
 ```bash
 git clone https://github.com/ajaysaxenabtech/dip-recovery-strategy.git
 cd dip-recovery-strategy

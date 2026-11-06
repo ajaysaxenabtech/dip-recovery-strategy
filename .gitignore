@@ -1,25 +1,5 @@
-# Python
 __pycache__/
 *.py[cod]
-*.egg-info/
-.venv/
-venv/
-env/
-
-# Backtest runtime artifacts
-_cache/
+silver_results.json
+silver_paper_result.json
 _reports/
-*.parquet
-
-# Jupyter
-.ipynb_checkpoints/
-
-# OS / editor
-.DS_Store
-Thumbs.db
-*.swp
-.idea/
-.vscode/
-
-# Word lock files
-~$*.docx
