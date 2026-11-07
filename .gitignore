@@ -3,3 +3,4 @@ __pycache__/
 silver_results.json
 silver_paper_result.json
 _reports/
+training_prompt.txt
